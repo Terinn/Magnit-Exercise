@@ -4,11 +4,25 @@ public class Main {
 
     public static void main(String[] args) {
         ArrayList<Integer> list = new ArrayList<>();
+        SqlCommand sql = new SqlCommand();
+        long start = System.currentTimeMillis();
 
-       SqlCommand.connectToDB();
-       SqlCommand.paste(10);
-       SqlCommand.addValueToList(list);
-       SqlCommand.createXML(list);
+       sql.connectToDB();
+
+       sql.paste(5000);
+
+       sql.addValueToList(list);
+
+       sql.createXML(list);
+
+       sql.xsl("1.xml","2.xml","red.xsl");
+
+       sql.parse();
+
+       sql.closeAll();
+
+        System.out.println("Время работы программы - "+(((System.currentTimeMillis() - start)/1000)/60) + " минут");
+
 
     }
 }

@@ -1,13 +1,17 @@
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.*;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.File;
+import javax.xml.transform.stream.StreamSource;
+import java.io.*;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,7 @@ public class SqlCommand {
         //Вставляем N элементов в SQL таблицу
     public static void paste(int n){
         try {
-            ResultSet rs = stmt.executeQuery("SELECT*FROM test_table");
+            ResultSet rs = stmt.executeQuery("SELECT FIELD FROM test_table");
             if (rs.next()) {
                 stmt.executeUpdate("DELETE FROM test_table WHERE FIELD >0");
             }
@@ -54,7 +58,7 @@ public class SqlCommand {
     }
 
 
-    //Создаю файл и вставляю в него значения из таблицы
+    //Создаю файл и вставляю в него значения из колелекции
     public static void createXML(List<Integer> list){
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder;
@@ -88,11 +92,59 @@ public class SqlCommand {
     public static void addValueToList(ArrayList<Integer> list){
 
         try {
-            rs = stmt.executeQuery("SELECT*FROM test_table");
+            rs = stmt.executeQuery("SELECT FIELD FROM test_table");
             while(rs.next()){
                 list.add(rs.getInt(1));
             }
         }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+    //Создаем новый XML по образу и подобию XSL файла
+    public static void xsl(String inFilename, String outFilename, String xslFilename) {
+        try {
+            TransformerFactory factory = TransformerFactory.newInstance();
+
+            Templates template = factory.newTemplates(new StreamSource(new FileInputStream(xslFilename)));
+
+            Transformer transformer = template.newTransformer();
+
+
+            Source source = new StreamSource(new FileInputStream(inFilename));
+            Result result = new StreamResult(new FileOutputStream(outFilename));
+
+            transformer.transform(source, result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    //Парсим XML файл
+    public static void parse(){
+        try{
+            long sum = 0;
+            DocumentBuilder docBuild = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            Document doc = docBuild.parse("2.xml");
+
+            NodeList entry = doc.getElementsByTagName("entry");
+
+            for(int i = 0; i< entry.getLength();i++){
+                Node entryAtt = entry.item(i);
+                String key = entryAtt.getAttributes().getNamedItem("field").getNodeValue();
+                int num = Integer.parseInt(key);
+                sum +=num;
+            }
+            System.out.println("Сумма значений всех аттрибутов = " + sum);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public static void closeAll(){
+        try {
+            con.close();
+            stmt.close();
+            rs.close();
+        }catch(SQLException e){
             e.printStackTrace();
         }
     }
