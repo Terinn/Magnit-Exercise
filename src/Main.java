@@ -8,7 +8,7 @@ public class Main {
         sql.setPassword("root");
         //Метод init запускает все методы внутри класса SQLCommand
         // и принимает значение N --> колличество элементов которые необходимо вставить;
-        sql.init(20);
+        sql.init(21);
 
 
 

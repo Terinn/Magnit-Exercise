@@ -21,7 +21,6 @@ public class SQLCommand {
    private static ArrayList<Integer> list = new ArrayList<>();
 
     public static void init(int n){
-        long a = System.currentTimeMillis();
         connectToDB();
         paste(n);
         addValueToList(list);
@@ -29,11 +28,6 @@ public class SQLCommand {
         xsl("1.xml","2.xml","red.xsl");
         parse();
         closeAll();
-        if((System.currentTimeMillis()-a)>1000*60*5) {
-            closeAll();
-            System.out.println("Время работы программы - "+(((System.currentTimeMillis() - a)/1000)/60) + " минут");
-            System.exit(0);
-        }
     }
 
     public SQLCommand(String url, String user, String password) {
