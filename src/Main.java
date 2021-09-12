@@ -1,7 +1,6 @@
 public class Main {
 
     public static void main(String[] args) {
-        long start = System.currentTimeMillis();
 
         SQLCommand sql = new SQLCommand();
         sql.setUrl("jdbc:mysql://localhost:3306/test");
