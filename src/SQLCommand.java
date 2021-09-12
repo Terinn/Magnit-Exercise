@@ -16,11 +16,51 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SqlCommand {
+public class SQLCommand {
 
-    private static final String url = "jdbc:mysql://localhost:3306/test";
-    private static final String user = "root";
-    private static final String password = "root";
+   private static ArrayList<Integer> list = new ArrayList<>();
+
+    public static void init(int n){
+        long a = System.currentTimeMillis();
+        connectToDB();
+        paste(n);
+        addValueToList(list);
+        createXML(list);
+        xsl("1.xml","2.xml","red.xsl");
+        parse();
+        closeAll();
+        if((System.currentTimeMillis()-a)>1000*60*5) {
+            closeAll();
+            System.out.println("Время работы программы - "+(((System.currentTimeMillis() - a)/1000)/60) + " минут");
+            System.exit(0);
+        }
+    }
+
+    public SQLCommand(String url, String user, String password) {
+        this.url = url;
+        this.user = user;
+        this.password = password;
+    }
+
+    public SQLCommand(){
+
+    }
+
+    public static void setUrl(String url) {
+        SQLCommand.url = url;
+    }
+
+    public static void setUser(String user) {
+        SQLCommand.user = user;
+    }
+
+    public static void setPassword(String password) {
+        SQLCommand.password = password;
+    }
+
+    private static  String url;
+    private static  String user;
+    private static  String password;
 
     private static Connection con;
     private static Statement stmt;
@@ -100,7 +140,7 @@ public class SqlCommand {
             e.printStackTrace();
         }
     }
-    //Создаем новый XML по образу и подобию XSL файла
+    //Создаем новый XML по образу XSL файла
     public static void xsl(String inFilename, String outFilename, String xslFilename) {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
@@ -148,4 +188,5 @@ public class SqlCommand {
             e.printStackTrace();
         }
     }
+
 }
