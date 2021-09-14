@@ -10,21 +10,21 @@
 находились записи, то они удаляются перед вставкой.
 3. Затем приложение запрашивает эти данные из TEST.FIELD и формирует корректный XML-документ
 вида
-<entries>
-  <entry>
-    <field>1</field>
-  </entry>
-  <entry>
-    <field>2</field>
-  </entry>
-</entries>
+entries
+  entry
+    field>1</field
+  entry
+  entry
+    field>2</field
+  entry
+entries
 (с N вложенных элементов entry)
 Документ сохраняется в файловую систему как 1.xml.
 4. Посредством XSLT, приложение преобразует содержимое 1.xml к следующему виду:
-<entries>
-  <entry field="1"/>
-  <entry field="2"/>
-</entries>
+entries
+  <entry field="1"
+  entry field="2"
+entries
 (с N вложенных элементов entry)
 Новый документ сохраняется в файловую систему как 2.xml.
 5. Приложение парсит 2.xml и выводит арифметическую сумму значений всех атрибутов field в
